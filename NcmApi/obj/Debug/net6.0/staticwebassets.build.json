@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "yvwJtEcifjAOpjIRf4QJtFdxbxLpy749+fHfVXIcXLM=",
+  "Source": "NcmApi",
+  "BasePath": "_content/NcmApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
