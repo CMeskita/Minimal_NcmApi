@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NcmApi.Model;
 using NcmApi.Model.Excepton;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,7 +81,10 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
 {
     try
     {
-        var desc = await repository.GetDescricao(descricao);
+        List<Ncm> desc = await new Repository().GetDescricao(descricao);
+       
+
+       // var desc = await repository.GetDescricao(descricao);
         if (desc == null)
         {
             return new Response
@@ -89,14 +93,22 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
                 StatusCode = 404
             };
         }
-    
+        //var cod = desc.Select(x=> new CodResponse { Codigo=x.Codigo}).ToList();
+        //new CodResponse { Codigo = item.Codigo };
+        List<string> cod = desc.Select(x => x.Codigo).ToList();
+
+
+
+        // return await cod.ToListAsync();
+
         return new Response
         {
-            Codigo = desc.Codigo,
-            Descricao = desc.Descricao,
-            Message = "success",
-            StatusCode = 200
+            //await cod.ToListAsync()
+            Codigo = cod.ToString()
         };
+
+
+
     }
 
     catch (NcmException)

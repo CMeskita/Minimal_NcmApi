@@ -16,7 +16,7 @@
 
         public Guid Id { get; set; }
         public string Codigo { get; protected set; }
-        public string? Descricao { get; protected set; }
+        public string Descricao { get; protected set; }
         public string DataInicio { get; protected set; } 
         public string DataFim { get; protected set; }
 
@@ -24,5 +24,10 @@
         public int Numero { get; protected set; } 
 
         public int Ano { get; protected set; }
+
+        public void SecaoNcm()
+        {
+            
+        }
     }
 }

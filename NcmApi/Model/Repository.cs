@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NcmApi.Model.Excepton;
+using System.Collections.Generic;
 
 namespace NcmApi.Model
 {
@@ -18,14 +19,9 @@ namespace NcmApi.Model
             return ncm;
         }
 
-        public async Task<Ncm> GetDescricao(string? descricao)
+        public async Task<List<Ncm>> GetDescricao(string descricao)
         {
-
-            var ncm = await db.Ncms.FirstOrDefaultAsync(x => x.Descricao == descricao);
-
-       
-          
-            return ncm;
+            return await db.Ncms.Where(x => x.Descricao.Contains(descricao)).ToListAsync();
         }
     }
 }
