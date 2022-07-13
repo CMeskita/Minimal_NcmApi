@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using NcmApi.Model;
 using NcmApi.Model.Excepton;
 using System.Linq;
+using static NcmApi.Model.Excepton.Response;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +64,7 @@ app.MapGet("v1/ncm/codigo/{codigo}", async (string codigo) =>
         }
         return new Response
         {
-            Codigo = cod.Codigo,
+            //codigoResponse = cod.Codigo,
             Descricao = cod.Descricao,
             Message = "success",
             StatusCode = 200
@@ -81,11 +82,9 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
 {
     try
     {
-        List<Ncm> desc = await new Repository().GetDescricao(descricao);
-       
+      var GetObjetosNcm = await new Repository().GetDescricao(descricao);
 
-       // var desc = await repository.GetDescricao(descricao);
-        if (desc == null)
+        if (GetObjetosNcm.Count==0 ||GetObjetosNcm==null)
         {
             return new Response
             {
@@ -93,22 +92,46 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
                 StatusCode = 404
             };
         }
-        //var cod = desc.Select(x=> new CodResponse { Codigo=x.Codigo}).ToList();
-        //new CodResponse { Codigo = item.Codigo };
-        List<string> cod = desc.Select(x => x.Codigo).ToList();
 
-
-
-        // return await cod.ToListAsync();
-
-        return new Response
+       // List<string> GetFiltrandoSoCodigo = GetObjetosNcm.Select(x => x.Codigo).ToList();
+        foreach (var codigo in GetObjetosNcm)
         {
-            //await cod.ToListAsync()
-            Codigo = cod.ToString()
-        };
+            // List<string> GetFiltrandoSoCodigo = GetObjetosNcm.Select(x => x.Codigo).ToList();
+            //Console.WriteLine(codigo);
+            //return new CodResponse { Codigo = codigo };
+
+            return new Response
+            {
 
 
+                Descricao = descricao,
+                Message = "success",
+                StatusCode = 200,
 
+                codigoResponse = GetObjetosNcm.Select(codigoAll => new CodResponse
+                {
+                    Codigo = codigoAll.Codigo.ToString()
+                }).ToList(),
+
+            };
+            // return await cod.ToListAsync();
+
+
+            //    return new Response
+            //    {
+
+
+            //        Descricao = null,
+            //        Message = "success",
+            //        StatusCode = 200,
+            //        //  Codigo = 
+            //        //Codigo = await desc.Select(x =>new CodResponse
+            //    //{
+            //    //    Codigo=x.Codigo
+            //    //}).ToListAsync()
+            //};
+        }
+        return null;
     }
 
     catch (NcmException)

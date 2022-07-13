@@ -5,6 +5,8 @@ C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\NcmApi.deps
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\NcmApi.runtimeconfig.json
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\NcmApi.dll
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\NcmApi.pdb
+C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Dapper.dll
+C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Dapper.Contrib.dll
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -57,5 +59,3 @@ C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\refint\NcmA
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\NcmApi.pdb
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\NcmApi.genruntimeconfig.cache
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\ref\NcmApi.dll
-C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Dapper.dll
-C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Dapper.Contrib.dll
