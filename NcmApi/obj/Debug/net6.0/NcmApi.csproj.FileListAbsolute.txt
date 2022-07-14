@@ -59,3 +59,5 @@ C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\refint\NcmA
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\NcmApi.pdb
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\NcmApi.genruntimeconfig.cache
 C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\obj\Debug\net6.0\ref\NcmApi.dll
+C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Desenvolvimento\source\repos\NcmApi\NcmApi\bin\Debug\net6.0\microsoft.identitymodel.dll

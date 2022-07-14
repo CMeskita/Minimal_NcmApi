@@ -1,11 +1,36 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.WSIdentity;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NcmApi;
 using NcmApi.Model;
 using NcmApi.Model.Excepton;
 using System.Linq;
+using System.Text;
 using static NcmApi.Model.Excepton.Response;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//var key = Encoding.ASCII.GetBytes(Settings.Secret);
+
+//builder.Services.AddAuthentication(x =>
+//{
+//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(x =>
+//{
+//    x.RequireHttpsMetadata = false;
+//    x.SaveToken = true;
+//    x.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(key),
+//        ValidateIssuer = false,
+//        ValidateAudience = false
+//    };
+//});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -25,6 +50,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddDbContext<dbContext>();
 
+
 var app = builder.Build();
 
 Repository repository = new();
@@ -37,54 +63,49 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NCM API V1");
 });
 
-//app.MapGet("/v1/ncm", async (SqlContext context) => await context.Ncm.FindAsync());
-app.MapGet("/v1/ncm", () => "Hello World!");
-
 app.MapGet("v1/ncm/codigo/{codigo}", async (string codigo) =>
 {
     try
     {
-        var cod = await repository.GetCode(codigo);
-        if (cod == null)
+        var GetObjetosNcmDescricao = await repository.GetCode(codigo);
+
+        if (GetObjetosNcmDescricao == null)
         {
             return new Response
             {
                 Message = "Not Found",
                 StatusCode = 404
             };
-        }
-        else if (cod.Descricao == null)
+        }      
+        else if (GetObjetosNcmDescricao.Descricao == null)
         {
-
             return new Response
             {
                 Message = $"Código Ncm {codigo} Não tem Descrição",
-                StatusCode = 404
+                StatusCode = 404,
+                //Descricao= GetCodigoNcm.Descricao
             };
         }
+     
         return new Response
         {
             //codigoResponse = cod.Codigo,
-            Descricao = cod.Descricao,
+            Descricao = GetObjetosNcmDescricao.Descricao,
             Message = "success",
             StatusCode = 200
         };
     }
-
     catch (NcmException ex)
-    {
-
-        return new Response { Message = ex.Message };
-    }
+    { return new Response { Message = ex.Message };}
 });
 
-app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
+app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao_Digitada) =>
 {
     try
     {
-      var GetObjetosNcm = await new Repository().GetDescricao(descricao);
+        var GetObjetosNcmCodigo = await new Repository().GetDescricao(descricao_Digitada);
 
-        if (GetObjetosNcm.Count==0 ||GetObjetosNcm==null)
+        if (GetObjetosNcmCodigo.Count == 0 || GetObjetosNcmCodigo == null)
         {
             return new Response
             {
@@ -93,43 +114,21 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
             };
         }
 
-       // List<string> GetFiltrandoSoCodigo = GetObjetosNcm.Select(x => x.Codigo).ToList();
-        foreach (var codigo in GetObjetosNcm)
+        foreach (var codigo in GetObjetosNcmCodigo)
         {
-            // List<string> GetFiltrandoSoCodigo = GetObjetosNcm.Select(x => x.Codigo).ToList();
-            //Console.WriteLine(codigo);
-            //return new CodResponse { Codigo = codigo };
-
             return new Response
             {
 
-
-                Descricao = descricao,
-                Message = "success",
+                Descricao = descricao_Digitada,
+                Message = "Success",
                 StatusCode = 200,
-
-                codigoResponse = GetObjetosNcm.Select(codigoAll => new CodResponse
+                Codigo = GetObjetosNcmCodigo.Select(codigoAll => new CodigoResponse
                 {
                     Codigo = codigoAll.Codigo.ToString()
                 }).ToList(),
 
             };
-            // return await cod.ToListAsync();
 
-
-            //    return new Response
-            //    {
-
-
-            //        Descricao = null,
-            //        Message = "success",
-            //        StatusCode = 200,
-            //        //  Codigo = 
-            //        //Codigo = await desc.Select(x =>new CodResponse
-            //    //{
-            //    //    Codigo=x.Codigo
-            //    //}).ToListAsync()
-            //};
         }
         return null;
     }
@@ -137,7 +136,7 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao) =>
     catch (NcmException)
     {
 
-        return new Response { Message = "Algum campo nullo" };
+        return new Response { Message = "Um dos Campos está null" };
     }
 });
 app.Run();
