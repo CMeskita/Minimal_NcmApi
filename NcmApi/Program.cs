@@ -13,24 +13,24 @@ using static NcmApi.Model.Excepton.Response;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
-//builder.Services.AddAuthentication(x =>
-//{
-//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(x =>
-//{
-//    x.RequireHttpsMetadata = false;
-//    x.SaveToken = true;
-//    x.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = new SymmetricSecurityKey(key),
-//        ValidateIssuer = false,
-//        ValidateAudience = false
-//    };
-//});
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Settings.KEY_BYTES),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -49,12 +49,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddDbContext<dbContext>();
-
-
 var app = builder.Build();
 
 Repository repository = new();
-
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -62,9 +59,13 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NCM API V1");
 });
+app.UseAuthentication();
+//app.UseAuthorization();
 
-app.MapGet("v1/ncm/codigo/{codigo}", async (string codigo) =>
+app.MapGet("v1/ncm/codigo/{codigo}", async ([FromHeader] string autorizacao, string codigo) =>
 {
+   
+   
     try
     {
         var GetObjetosNcmDescricao = await repository.GetCode(codigo);
@@ -87,9 +88,11 @@ app.MapGet("v1/ncm/codigo/{codigo}", async (string codigo) =>
             };
         }
      
+        
         return new Response
         {
             //codigoResponse = cod.Codigo,
+        
             Descricao = GetObjetosNcmDescricao.Descricao,
             Message = "success",
             StatusCode = 200
@@ -99,7 +102,7 @@ app.MapGet("v1/ncm/codigo/{codigo}", async (string codigo) =>
     { return new Response { Message = ex.Message };}
 });
 
-app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao_Digitada) =>
+app.MapGet("v1/ncm/descricao/{descricao}", async   (string descricao_Digitada) =>
 {
     try
     {
@@ -119,7 +122,7 @@ app.MapGet("v1/ncm/descricao/{descricao}", async (string descricao_Digitada) =>
             return new Response
             {
 
-                Descricao = descricao_Digitada,
+                Descricao = codigo.Descricao,
                 Message = "Success",
                 StatusCode = 200,
                 Codigo = GetObjetosNcmCodigo.Select(codigoAll => new CodigoResponse

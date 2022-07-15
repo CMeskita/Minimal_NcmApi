@@ -11,14 +11,15 @@ namespace NcmApi.Model.Excepton
         //public List<CodigoResponse>? Descricao { get; set; }
         public string? Descricao { get; set; }
         //public string? Codigo { get; set; }
-
+       // public List<DescricaoResponse>? Descricaos { get; set; }
         public List<CodigoResponse>? Codigo { get; set; }
         public class CodigoResponse
         {
             public string? Codigo { get; set; }
         }
-        public class DescrcaoResponse
+        public class DescricaoResponse
         {
+            public string? Descricao { get; set; }
             public string? Secao { get; set; }
             public string? Capitulo { get; set; }
             public string? SubCapitulo { get; set; }
